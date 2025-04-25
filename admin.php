@@ -28,7 +28,7 @@ if ($result -> num_rows == 1){
 <html>
   <head>
       <title>Admin Login</title>
-      <link rel="stylesheet" href="style.css">
+      <link rel="stylesheet" href="adminstyle.css">
   </head>
 
   <body>
