@@ -20,36 +20,20 @@ if ($conn->connect_error) {
 $message = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Sanitize and trim input
-    $username = trim($_POST["username"]);
-    $password = trim($_POST["password"]);
+    $username = $_POST["username"];
+    $password = $_POST["password"];
 
-    // Debug: Log username for testing
-    error_log("Username entered: " . $username);
-
-    // Prevent SQL Injection
-    $username = $conn->real_escape_string($username);
-
-    // Prepare and execute query
-    $stmt = $conn->prepare("SELECT * FROM admin_account WHERE adminuser = ?");
-    if (!$stmt) {
-        error_log("Prepare failed: (" . $conn->errno . ") " . $conn->error);
-        die("Database query failed.");
-    }
-
+    // Prepare SQL query to avoid SQL Injection
+    $stmt = $conn->prepare("SELECT * FROM admin WHERE adminuser = ?");
     $stmt->bind_param("s", $username);
     $stmt->execute();
     $result = $stmt->get_result();
 
-    // Debug: Log number of rows returned
-    error_log("Number of rows returned: " . $result->num_rows);
-
+    // Check if user exists
     if ($result->num_rows == 1) {
         $row = $result->fetch_assoc();
-        // Debug: Log stored password hash
-        error_log("Stored password hash: " . $row['adminpass']); 
-
-        // Check if password matches the stored hash
+        
+        // Check if the password matches (using password_verify)
         if (password_verify($password, $row['adminpass'])) {
             $_SESSION["admin"] = $username;
             header("Location: admin_dashboard.php");
@@ -81,7 +65,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </form>
 
         <?php if (!empty($message)): ?>
-            <div class="message"><?php echo htmlspecialchars($message); ?></div>
+            <div class="message"><?php echo $message; ?></div>
         <?php endif; ?>
     </div>
 </body>
