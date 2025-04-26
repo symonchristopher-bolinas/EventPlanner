@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,8 +17,14 @@
                 <li><a href="index.php" class="active">Home</a></li>
                 <li><a href="#">Contact Us</a></li>
                 <li><a href="aboutus.php">About Us</a></li>
-                <li><a href="account/login.php">Sign In</a></li>
-                <li><a href="#">Sign Up</a></li>
+
+                <?php if (isset($_SESSION['client_logged_in'])): ?>
+                    <li><h1><?php echo htmlspecialchars($_SESSION['client_email']); ?></h1></li>
+                    <li><a href="account/logout.php">Logout</a></li>
+                <?php else: ?>
+                    <li><a href="account/login.php">Sign In</a></li>
+                    <li><a href="#">Sign Up</a></li>
+                <?php endif; ?>
             </ul>
         </nav>
     </header>

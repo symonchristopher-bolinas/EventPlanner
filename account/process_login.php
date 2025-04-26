@@ -38,7 +38,7 @@ if ($row = $result->fetch_assoc()) {
     if (password_verify($pass, $row['clientpassword'])) { 
         $_SESSION['client_logged_in'] = true;
         $_SESSION['client_email'] = $row['clientemail'];
-        header('Location: client_dashboard.php');
+        header('Location: ../index.php');
         exit();
     }
 }
