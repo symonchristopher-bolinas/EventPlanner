@@ -86,3 +86,69 @@ body, html {
     background-color: maroon;
     color: white;
 }
+
+.section-title {
+    text-align: center;
+    margin-top: 30px;
+    font-size: 32px;
+    font-weight: bold;
+    color: black;
+    text-shadow: 2px 2px 3px rgba(0,0,0,0.3);
+}
+
+/* Contact Cards */
+.contact-section {
+    padding: 40px;
+    text-align: center;
+}
+
+.contact-cards {
+    display: flex;
+    justify-content: center;
+    gap: 50px;
+    margin: 30px 0;
+}
+
+.contact-card {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 300px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.contact-card img {
+    margin-bottom: 10px;
+}
+
+.chat-button {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #003399;
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 8px;
+}
+
+/* Help Section */
+.help-section {
+    margin-top: 50px;
+}
+
+.help-section h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.help-section p {
+    margin-top: 5px;
+    font-size: 16px;
+}
+
+.help-section a {
+    color: #003399;
+    text-decoration: none;
+    font-weight: bold;
+}

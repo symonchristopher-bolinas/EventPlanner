@@ -15,7 +15,7 @@ session_start();
         <nav>
             <ul>
                 <li><a href="#" class="active">Home</a></li>
-                <li><a href="#">Contact Us</a></li>
+                <li><a href="contactus.php">Contact Us</a></li>
                 <li><a href="aboutus.php">About Us</a></li>
 
                 <?php if (isset($_SESSION['client_logged_in'])): ?>
