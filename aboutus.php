@@ -14,12 +14,12 @@ session_start();
         <div class="logo">Event<span style="color:blue;">Sync</span></div>
         <nav>
             <ul>
-                <li><a href="index.php" class="active">Home</a></li>
-                <li><a href="#">Contact Us</a></li>
-                <li><a href="aboutus.php">About Us</a></li>
+                <li><a href="index.php">Home</a></li>
+                <li><a href="contactus.php">Contact Us</a></li>
+                <li><a href="aboutus.php" class="active">About Us</a></li>
 
                 <?php if (isset($_SESSION['client_logged_in'])): ?>
-                    <li><h1><?php echo htmlspecialchars($_SESSION['client_email']); ?></h1></li>
+                    <li><?php echo htmlspecialchars($_SESSION['client_email']); ?></li>
                     <li><a href="account/logout.php">Logout</a></li>
                 <?php else: ?>
                     <li><a href="account/login.php">Sign In</a></li>

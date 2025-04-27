@@ -18,11 +18,11 @@ session_start();
                 <li><a href="contactus.php" class="active">Contact Us</a></li>
                 <li><a href="aboutus.php">About Us</a></li>
                 <?php if (isset($_SESSION['client_logged_in'])): ?>
-                    <li><i class="fa fa-calendar"></i></li>
-                    <li><i class="fa fa-bell"></i></li>
-                    <li><i class="fa fa-user"></i> <?php echo htmlspecialchars($_SESSION['client_email']); ?></li>
+                    <li><?php echo htmlspecialchars($_SESSION['client_email']); ?></li>
+                    <li><a href="account/logout.php">Logout</a></li>
                 <?php else: ?>
                     <li><a href="account/login.php">Sign In</a></li>
+                    <li><a href="#">Sign Up</a></li>
                 <?php endif; ?>
             </ul>
         </nav>

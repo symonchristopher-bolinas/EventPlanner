@@ -19,7 +19,7 @@ session_start();
                 <li><a href="aboutus.php">About Us</a></li>
 
                 <?php if (isset($_SESSION['client_logged_in'])): ?>
-                    <li><h1><?php echo htmlspecialchars($_SESSION['client_email']); ?></h1></li>
+                    <li><?php echo htmlspecialchars($_SESSION['client_email']); ?></li>
                     <li><a href="account/logout.php">Logout</a></li>
                 <?php else: ?>
                     <li><a href="account/login.php">Sign In</a></li>
