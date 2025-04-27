@@ -46,49 +46,10 @@ if (isset($_SESSION['client_logged_in'])) {
 
         <div class="links">
           <a href="#">forgot password</a>
-          <a href="javascript:void(0);" id="signUpBtn">don't have an account</a>
+          <a href="signup.php">don't have an account</a>
         </div>
 
         <button type="submit">SIGN IN</button>
-      </form>
-    </div>
-  </div>
-
-  <!-- Modal Sign Up -->
-  <div id="signUpModal" class="modal">
-    <div class="modal-content">
-      <span class="close" id="closeModal">&times;</span>
-      <h2>Sign Up</h2>
-
-      <form method="POST" action="process_signup.php">
-        <input type="email" name="email" placeholder="Email" required>
-        <input type="email" name="confirm_email" placeholder="Confirm Email" required>
-
-        <div class="password-wrapper">
-          <input type="password" name="password" id="signup_password" placeholder="Password" required>
-          <span class="toggle-password" onclick="toggleSignupPassword()">👁️</span>
-        </div>
-
-        <div class="password-wrapper">
-          <input type="password" name="confirm_password" id="signup_confirm_password" placeholder="Confirm Password" required>
-          <span class="toggle-password" onclick="toggleSignupConfirmPassword()">👁️</span>
-        </div>
-
-        <select name="organization" required>
-          <option value="">Select Organization</option>
-          <option value="Org1">Organization 1</option>
-          <option value="Org2">Organization 2</option>
-          <option value="Org3">Organization 3</option>
-        </select>
-
-        <select name="department" required>
-          <option value="">Select Department</option>
-          <option value="Dept1">Department 1</option>
-          <option value="Dept2">Department 2</option>
-          <option value="Dept3">Department 3</option>
-        </select>
-
-        <button type="submit">Sign Up</button>
       </form>
     </div>
   </div>
