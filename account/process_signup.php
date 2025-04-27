@@ -1,42 +1,41 @@
 <?php
 session_start();
+include 'send_verification_code.php'; // Make sure updated ito
 
-// Include database connection
+// Database connection
 $servername = "localhost";
-$username = "root";  // Your MySQL username
-$password = "";      // Your MySQL password
-$dbname = "eventplanner"; // Your database name
+$username = "root";
+$password = "";
+$dbname = "eventplanner";
 
-// Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
 
-// Check connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Process form data when POST request is made
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $email = $_POST['email'];
-    $confirm_email = $_POST['confirm_email'];
+    // Get and sanitize user inputs
+    $email = trim($_POST['email']);
+    $confirm_email = trim($_POST['confirm_email']);
     $password = $_POST['password'];
     $confirm_password = $_POST['confirm_password'];
-    $organization = $_POST['organization'];
-    $department = $_POST['department'];
+    $organization = trim($_POST['organization']);
+    $department = trim($_POST['department']);
 
-    // Check if email matches confirm_email
+    // Validate email match
     if ($email !== $confirm_email) {
-        header("Location: login.php?error=Emails do not match");
+        header("Location: signup.php?error=" . urlencode("Emails do not match"));
         exit();
     }
 
-    // Check if passwords match
+    // Validate password match
     if ($password !== $confirm_password) {
-        header("Location: login.php?error=Passwords do not match");
+        header("Location: signup.php?error=" . urlencode("Passwords do not match"));
         exit();
     }
 
-    // Hash the password for security
+    // Hash the password
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
     // Check if email already exists
@@ -47,29 +46,43 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $result = $stmt->get_result();
 
     if ($result->num_rows > 0) {
-        // Email already exists, redirect with an error
-        header("Location: login.php?error=Email already registered");
+        $stmt->close();
+        $conn->close();
+        header("Location: signup.php?error=" . urlencode("Email already registered"));
         exit();
     }
+    $stmt->close(); // Close after checking
 
-    // Prepare SQL query to insert new user into `client_account` table
-    $sql = "INSERT INTO client_account (clientemail, clientpassword, organization, department) VALUES (?, ?, ?, ?)";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ssss", $email, $hashed_password, $organization, $department);
+    
 
-    // Execute the query
-    if ($stmt->execute()) {
-        // Redirect to login page with success message
-        header("Location: login.php?success=Registration successful! Please log in.");
-        exit();
+    // Generate 6-digit OTP
+    $verification_code = rand(100000, 999999);
+
+    // Send OTP via email
+    $email_sent = sendVerificationCode($email, $verification_code);
+
+    if ($email_sent === true) {
+        // Insert into database with same OTP
+        $insert_query = "INSERT INTO client_account (clientemail, clientpassword, organization, department, verification_code) VALUES (?, ?, ?, ?, ?)";
+        $stmt = $conn->prepare($insert_query);
+        $stmt->bind_param("sssss", $email, $hashed_password, $organization, $department, $verification_code);
+
+        if ($stmt->execute()) {
+            $_SESSION['email_for_verification'] = $email;
+            $stmt->close();
+            $conn->close();
+            header("Location: signup.php?verify=true");
+            exit();
+        } else {
+            $stmt->close();
+            $conn->close();
+            header("Location: signup.php?error=" . urlencode("Error during registration"));
+            exit();
+        }
     } else {
-        // Error occurred during insertion
-        header("Location: login.php?error=Error occurred during registration");
+        $conn->close();
+        header("Location: signup.php?error=" . urlencode($email_sent));
         exit();
     }
-
-    // Close connection
-    $stmt->close();
-    $conn->close();
 }
 ?>

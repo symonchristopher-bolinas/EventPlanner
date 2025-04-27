@@ -11,7 +11,7 @@ if (isset($_SESSION['admin_logged_in']) || isset($_SESSION['client_logged_in']))
   <meta charset="UTF-8">
   <title>Event Sync - Sign Up</title>
   <style>
-    /* Quick internal styles to match the image you sent */
+    /* Basic page structure and styles */
     body {
       margin: 0;
       font-family: Arial, sans-serif;
@@ -20,14 +20,14 @@ if (isset($_SESSION['admin_logged_in']) || isset($_SESSION['client_logged_in']))
     }
     .left-panel {
         background: linear-gradient(to right, #0b0b3b, #3a3a52);
-    color: white;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 2rem;
+        color: white;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 2rem;
     }
     .left-panel img {
         width: 200px;
@@ -41,12 +41,12 @@ if (isset($_SESSION['admin_logged_in']) || isset($_SESSION['client_logged_in']))
     }
     .signup-form-container {
         background: #ffffff;
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 2rem;
-    position: relative;
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+        position: relative;
     }
     .form-box {
       width: 100%;
@@ -99,6 +99,61 @@ if (isset($_SESSION['admin_logged_in']) || isset($_SESSION['client_logged_in']))
       text-decoration: none;
       color: black;
     }
+
+    /* OTP Modal Styles */
+    .otp-modal {
+      display: none; /* Hidden by default */
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.4); /* Black with transparency */
+    }
+
+    .otp-modal-content {
+      background-color: #fff;
+      margin: 15% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+      max-width: 400px;
+    }
+
+    .otp-modal .close {
+      color: #aaa;
+      font-size: 28px;
+      font-weight: bold;
+      position: absolute;
+      top: 10px;
+      right: 20px;
+    }
+
+    .otp-modal .close:hover,
+    .otp-modal .close:focus {
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .otp-modal input {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      font-size: 16px;
+    }
+    .otp-modal button {
+      width: 100%;
+      padding: 12px;
+      background-color: #004080;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
@@ -137,13 +192,60 @@ if (isset($_SESSION['admin_logged_in']) || isset($_SESSION['client_logged_in']))
       </select>
 
       <div class="terms">
-        <input type="checkbox" required> By creating an account, you agree to our <a href="#">Terms</a>.
+        <input type="checkbox" required> By creating an account, you agree to our <a href="#">Terms</a>.<br>
       </div>
 
       <button type="submit" class="signup-button">SIGN UP</button>
     </form>
   </div>
 </div>
+
+<!-- OTP Verification Modal -->
+<div id="otpModal" class="otp-modal">
+  <div class="otp-modal-content">
+    <span class="close" onclick="document.getElementById('otpModal').style.display='none'">&times;</span>
+    <h3>Enter OTP</h3>
+    <form action="login.php" method="POST">
+      <input type="text" name="otp" placeholder="Enter OTP" required><br>
+      <input type="hidden" name="email" value="<?php echo $_SESSION['email_for_verification']; ?>">
+      <button type="submit">Verify OTP</button>
+    </form>
+    <p id="errorMessage" style="color:red; display:none;">Please enter a valid OTP</p>
+  </div>
+</div>
+
+<script>
+  // Display OTP Modal after successful registration
+  <?php if (isset($_SESSION['email_for_verification'])): ?>
+    document.getElementById('otpModal').style.display = 'block';
+  <?php endif; ?>
+
+  // Function to handle OTP verification when the form is submitted
+  function verifyOTP(event) {
+    event.preventDefault(); // Prevent form submission
+
+    var otp = document.getElementById('otpInput').value; // Get OTP entered by the user
+    var correctOtp = '123456'; // Replace with your actual OTP logic or backend check
+
+    // Handle validation here before submitting to the server
+    if (otp === correctOtp) {
+      // If OTP is correct, hide the modal and redirect to login.php
+      document.getElementById('otpModal').style.display = 'none';
+      window.location.href = 'login.php'; // Redirect to login page
+    } else {
+      // If OTP is incorrect, show error message
+      document.getElementById('errorMessage').style.display = 'block';
+    }
+  }
+
+  // Close OTP Modal when user clicks outside the modal
+  window.onclick = function(event) {
+    var modal = document.getElementById('otpModal');
+    if (event.target == modal) {
+      modal.style.display = "none";
+    }
+  };
+</script>
 
 </body>
 </html>
